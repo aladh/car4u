@@ -1,0 +1,32 @@
+stages:
+  - scrape
+  - notify
+
+puppeteer:
+  stage: scrape
+  image: node:18-bullseye
+  before_script:
+    - apt-get update && apt-get install -y libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2
+    - cd scraper
+  script:
+    - npm ci
+    - node index.js "$BOOKING_TIMES"
+  artifacts:
+    paths:
+      - scraper/*.png
+      - scraper/*.json
+    when: always
+  retry:
+    max: 2
+    when: script_failure
+
+notify-if-available:
+  stage: notify
+  image: golang:1.18-bullseye
+  before_script:
+    - mv scraper/status.json notifier/
+    - cd notifier
+  script:
+    - go run .
+  needs:
+    - puppeteer
