@@ -22,7 +22,7 @@ puppeteer:
 
 notify-if-available:
   stage: notify
-  image: golang:1.18-bullseye
+  image: golang:1.19-bullseye
   before_script:
     - mv scraper/status.json notifier/
     - cd notifier
