@@ -1,38 +1,45 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
+	"log"
+	"strings"
+
+	"notifier/config"
+	"notifier/status"
+	"notifier/webhook"
 )
 
-type Car struct {
-	Name      string `json:"name"`
-	Available bool   `json:"available"`
-}
-
-type Station struct {
-	Name string `json:"name"`
-	Cars []Car  `json:"cars"`
-}
-
-type Status struct {
-	BookingStart string    `json:"bookingStart"`
-	BookingEnd   string    `json:"bookingEnd"`
-	Stations     []Station `json:"stations"`
-}
-
 func main() {
-	file, err := os.Open("status.json")
+	status, err := status.LoadFrom("status.json")
 	if err != nil {
-		panic(err)
+		log.Fatalln(fmt.Errorf("could not load status: %w", err))
 	}
 
-	var status Status
-	err = json.NewDecoder(file).Decode(&status)
+	cfg, err := config.FromEnv()
 	if err != nil {
-		panic(err)
+		log.Fatalln(fmt.Errorf("could not load config: %w", err))
 	}
 
-	fmt.Println(status)
+	for _, station := range status.Stations {
+		if station.HasAvailableCars() && containsAny(station.Name, cfg.PreferredStations) {
+			message := fmt.Sprintf("Car(s) available at %s from %s to %s", station.Name, status.BookingStart, status.BookingEnd)
+			log.Println(message)
+
+			err = webhook.Send(cfg.WebhookURL, message)
+			if err != nil {
+				log.Fatalln(fmt.Errorf("could not send webhook: %w", err))
+			}
+		}
+	}
+}
+
+func containsAny(stationName string, preferredStations []string) bool {
+	for _, preferredStation := range preferredStations {
+		if strings.Contains(strings.ToLower(stationName), strings.ToLower(preferredStation)) {
+			return true
+		}
+	}
+
+	return false
 }
