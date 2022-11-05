@@ -34,7 +34,6 @@ export async function checkAvailability({
     await loginPage.login({ username, password })
 
     await page.waitForTimeout(5000)
-    await page.screenshot({ path: 'after_login.png' })
 
     const bookingPage = new BookingPage(page)
 
