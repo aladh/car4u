@@ -10,16 +10,7 @@ export default class BookingPage {
     await this.page.waitForTimeout(1000)
   }
 
-  async search({
-                 startMonth,
-                 startDay,
-                 startHour,
-                 startMinute,
-                 endMonth,
-                 endDay,
-                 endHour,
-                 endMinute
-               }) {
+  async search({ startMonth, startDay, startHour, startMinute, endMonth, endDay, endHour, endMinute }) {
     await this.page.$eval('input[name=StartMonth]', (el, value) => el.value = value, startMonth)
     await this.page.$eval('input[name=StartDay]', (el, value) => el.value = value, startDay)
     await this.page.select('select[name=StartHour]', startHour)
