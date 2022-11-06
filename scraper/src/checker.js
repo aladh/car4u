@@ -24,8 +24,6 @@ export async function checkAvailability({
   })
   const page = await browser.newPage()
 
-  let stations
-
   try {
     const loginPage = new LoginPage(page)
 
@@ -50,18 +48,13 @@ export async function checkAvailability({
 
     await page.screenshot({ path: 'reservation_grid.png', fullPage: true })
 
-    stations = await reservationGrid.stations()
+    let stations = await reservationGrid.stations()
 
+    await browser.close()
+
+    return stations
   } catch (e) {
     await page.screenshot({ path: 'error.png' })
-
-    console.log(`Caught error: ${e}`)
-    console.log(e.stack)
-
-    process.exitCode = 1
+    throw(e)
   }
-
-  await browser.close()
-
-  return stations
 }
