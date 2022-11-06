@@ -7,7 +7,7 @@ export default class BookingPage {
 
   async goto() {
     await this.page.goto('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
-    await this.page.waitForTimeout(1000)
+    await new Promise(r => setTimeout(r, 1000))
   }
 
   async search({ startMonth, startDay, startHour, startMinute, endMonth, endDay, endHour, endMinute }) {
@@ -22,7 +22,7 @@ export default class BookingPage {
     await this.page.select('select[name=EndMinute]', endMinute)
 
     await this.page.click('#Button_Disponibility')
-    await this.page.waitForTimeout(2000)
+    await new Promise(r => setTimeout(r, 2000))
 
     return new ReservationGrid(this.page)
   }

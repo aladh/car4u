@@ -18,7 +18,7 @@ export default class LoginPage {
     await this.page.type(USERNAME_SELECTOR, username)
     await this.page.type(PASSWORD_SELECTOR, password)
 
-    await this.page.waitForTimeout(1000)
+    await new Promise(r => setTimeout(r, 1000))
 
     await this.page.click(SUBMIT_SELECTOR)
   }

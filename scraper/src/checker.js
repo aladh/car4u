@@ -11,7 +11,7 @@ export async function checkAvailability({ username, password, dateTimeComponents
     await loginPage.goto()
     await loginPage.login({ username, password })
 
-    await page.waitForTimeout(5000)
+    await new Promise(r => setTimeout(r, 5000))
 
     const bookingPage = new BookingPage(page)
     await bookingPage.goto()
