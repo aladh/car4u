@@ -8,7 +8,7 @@ const status = {
   bookingEnd: formatDateTime(endMonth, endDay, endHour, endMinute)
 }
 
-console.log(`Running for booking times: ${status.bookingStart} to ${status.bookingEnd}`)
+console.log(`Running scraper for booking times: ${status.bookingStart} to ${status.bookingEnd}`)
 
 status.stations = await checkAvailability({ username: process.env.USERNAME, password: process.env.PASSWORD, dateTimeComponents })
 

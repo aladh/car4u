@@ -21,6 +21,8 @@ func main() {
 		log.Fatalln(fmt.Errorf("could not load config: %w", err))
 	}
 
+	log.Printf("Running notifier for booking times %s to %s with preferred stations %s\n", status.BookingStart, status.BookingEnd, cfg.PreferredStations)
+
 	for _, station := range status.Stations {
 		if station.HasAvailableCars() && containsAny(station.Name, cfg.PreferredStations) {
 			message := fmt.Sprintf("Car(s) available at %s from %s to %s", station.Name, status.BookingStart, status.BookingEnd)
