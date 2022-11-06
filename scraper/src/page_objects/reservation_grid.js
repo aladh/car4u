@@ -3,13 +3,7 @@ export default class ReservationGrid {
     this.page = page
   }
 
-  async hasStationsAvailable() {
-    const selectButtons = await this.page.$x("//a[contains(., 'Select')]")
-
-    return selectButtons.length > 0
-  }
-
-  async stationsJSON() {
+  async stations() {
     const stations = []
     const stationDivs = await this.page.$$('.tblAv')
 
@@ -41,19 +35,5 @@ export default class ReservationGrid {
     }
 
     return stations
-  }
-
-  async availableStationNames() {
-    const availableStationNames = []
-
-    const selectButtons = await this.page.$x("//a[contains(., 'Select')]")
-
-    for (const selectButton of selectButtons) {
-      const [station] = await selectButton.$$("xpath=./ancestor::div[contains(concat(' ', @class, ' '), ' tblAv ')]//div[contains(concat(' ', @class, ' '), ' strongName ')]//a")
-      const stationName = await this.page.evaluate(e => e.textContent, station)
-      availableStationNames.push(stationName)
-    }
-
-    return availableStationNames
   }
 }

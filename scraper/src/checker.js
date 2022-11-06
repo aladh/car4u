@@ -24,8 +24,7 @@ export async function checkAvailability({
   })
   const page = await browser.newPage()
 
-  let availableStations
-  let stationsJSON
+  let stations
 
   try {
     const loginPage = new LoginPage(page)
@@ -51,10 +50,7 @@ export async function checkAvailability({
 
     await page.screenshot({ path: 'reservation_grid.png', fullPage: true })
 
-    await reservationGrid.hasStationsAvailable() ? console.log('Found available station(s)') : console.log('No stations are available')
-
-    availableStations = await reservationGrid.availableStationNames()
-    stationsJSON = await reservationGrid.stationsJSON()
+    stations = await reservationGrid.stations()
 
   } catch (e) {
     await page.screenshot({ path: 'error.png' })
@@ -67,5 +63,5 @@ export async function checkAvailability({
 
   await browser.close()
 
-  return { availableStations, stationsJSON }
+  return stations
 }
