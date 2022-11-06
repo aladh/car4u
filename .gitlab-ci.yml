@@ -2,9 +2,6 @@ stages:
   - scrape
   - notify
 
-variables:
-  WEBHOOK_URL: $TEST_WEBHOOK_URL
-
 puppeteer:
   stage: scrape
   image: node:18-bullseye
