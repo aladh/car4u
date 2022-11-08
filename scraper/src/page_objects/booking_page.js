@@ -7,7 +7,7 @@ export default class BookingPage {
 
   async goto() {
     await this.page.goto('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
-    await new Promise(r => setTimeout(r, 1000))
+    await new Promise(r => setTimeout(r, 5000))
   }
 
   async search({ startMonth, startDay, startHour, startMinute, endMonth, endDay, endHour, endMinute }) {
