@@ -21,7 +21,7 @@ func FromEnv() (*Config, error) {
 
 	webhookURL, err := getEnvString("WEBHOOK_URL")
 	if err != nil {
-		return nil, err
+		webhookURL = ""
 	}
 
 	return &Config{

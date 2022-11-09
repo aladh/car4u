@@ -36,9 +36,11 @@ func notifyForPreferredStations(status *status.Status, cfg *config.Config) error
 			message := fmt.Sprintf("Car(s) available at %s from %s to %s", station.Name, status.BookingStart, status.BookingEnd)
 			log.Println(message)
 
-			err := webhook.Send(cfg.WebhookURL, message)
-			if err != nil {
-				return fmt.Errorf("could not send webhook: %w", err)
+			if len(cfg.WebhookURL) > 0 {
+				err := webhook.Send(cfg.WebhookURL, message)
+				if err != nil {
+					return fmt.Errorf("could not send webhook: %w", err)
+				}
 			}
 		}
 	}
