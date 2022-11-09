@@ -21,5 +21,6 @@ export default class LoginPage {
     await new Promise(r => setTimeout(r, 1000))
 
     await this.page.click(SUBMIT_SELECTOR)
+    await this.page.waitForNavigation()
   }
 }

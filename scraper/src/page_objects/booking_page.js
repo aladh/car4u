@@ -1,5 +1,7 @@
 import ReservationGrid from "./reservation_grid.js";
 
+const START_MONTH_SELECTOR = 'input[name=StartMonth]';
+
 export default class BookingPage {
   constructor(page) {
     this.page = page
@@ -7,11 +9,11 @@ export default class BookingPage {
 
   async goto() {
     await this.page.goto('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
-    await new Promise(r => setTimeout(r, 5000))
+    await this.page.waitForSelector(START_MONTH_SELECTOR)
   }
 
   async search({ startMonth, startDay, startHour, startMinute, endMonth, endDay, endHour, endMinute }) {
-    await this.page.$eval('input[name=StartMonth]', (el, value) => el.value = value, startMonth)
+    await this.page.$eval(START_MONTH_SELECTOR, (el, value) => el.value = value, startMonth)
     await this.page.$eval('input[name=StartDay]', (el, value) => el.value = value, startDay)
     await this.page.select('select[name=StartHour]', startHour)
     await this.page.select('select[name=StartMinute]', startMinute)
