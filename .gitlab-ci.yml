@@ -2,6 +2,9 @@ stages:
   - scrape
   - notify
 
+variables:
+  SCRAPE_OUTPUT_FILENAME: status.json
+
 puppeteer:
   stage: scrape
   image: node:18-bullseye
@@ -10,7 +13,8 @@ puppeteer:
     - cd scraper
   script:
     - npm ci
-    - node index.js "$BOOKING_TIMES"
+    - echo "Running scraper for booking times $BOOKING_TIMES"
+    - node index.js "$BOOKING_TIMES" > $SCRAPE_OUTPUT_FILENAME
   artifacts:
     paths:
       - scraper/*.png
@@ -24,9 +28,9 @@ notify-if-available:
   stage: notify
   image: golang:1.19-bullseye
   before_script:
-    - mv scraper/status.json notifier/
+    - mv scraper/$SCRAPE_OUTPUT_FILENAME notifier/
     - cd notifier
   script:
-    - go run .
+    - go run . < $SCRAPE_OUTPUT_FILENAME
   needs:
     - puppeteer

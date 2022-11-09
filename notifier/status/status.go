@@ -3,7 +3,7 @@ package status
 import (
 	"encoding/json"
 	"fmt"
-	"os"
+	"io"
 )
 
 type Car struct {
@@ -22,16 +22,12 @@ type Status struct {
 	Stations     []Station `json:"stations"`
 }
 
-func LoadFrom(filename string) (*Status, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-		return nil, fmt.Errorf("could not open file: %w", err)
-	}
-
+func LoadFrom(reader io.Reader) (*Status, error) {
 	var status Status
-	err = json.NewDecoder(file).Decode(&status)
+
+	err := json.NewDecoder(reader).Decode(&status)
 	if err != nil {
-		return nil, fmt.Errorf("could not decode file: %w", err)
+		return nil, fmt.Errorf("could not decode text: %w", err)
 	}
 
 	return &status, nil

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"notifier/config"
@@ -11,14 +12,14 @@ import (
 )
 
 func main() {
-	status, err := status.LoadFrom("status.json")
-	if err != nil {
-		log.Fatalf("Could not load status file: %s", err)
-	}
-
 	cfg, err := config.FromEnv()
 	if err != nil {
 		log.Fatalf("Could not load config: %s", err)
+	}
+
+	status, err := status.LoadFrom(os.Stdin)
+	if err != nil {
+		log.Fatalf("Could not load status file: %s", err)
 	}
 
 	log.Printf("Running notifier for booking times %s to %s with preferred stations %s\n", status.BookingStart, status.BookingEnd, cfg.PreferredStations)
