@@ -18,7 +18,7 @@ puppeteer:
   artifacts:
     paths:
       - scraper/*.png
-      - scraper/*.json
+      - scraper/$SCRAPE_OUTPUT_FILENAME
     when: always
   retry:
     max: 2
