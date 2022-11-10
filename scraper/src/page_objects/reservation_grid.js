@@ -1,3 +1,9 @@
+const STATION_DIV_SELECTOR = '.tblAv'
+const STATION_NAME_SELECTOR = '.strongName a'
+const CAR_DIV_SELECTOR = '.bRow'
+const CAR_NAME_SELECTOR = '.divDesc'
+const CAR_AVAILABILITY_SELECTOR = '.cBCar strong'
+
 export default class ReservationGrid {
   constructor(page) {
     this.page = page
@@ -5,20 +11,20 @@ export default class ReservationGrid {
 
   async stations() {
     const stations = []
-    const stationDivs = await this.page.$$('.tblAv')
+    const stationDivs = await this.page.$$(STATION_DIV_SELECTOR)
 
     for (const stationDiv of stationDivs) {
       const station = {
-        name: await stationDiv.$eval('.strongName a', e => e.textContent),
+        name: await stationDiv.$eval(STATION_NAME_SELECTOR, e => e.textContent),
         cars: []
       }
 
-      const carDivs = await stationDiv.$$('.bRow')
+      const carDivs = await stationDiv.$$(CAR_DIV_SELECTOR)
 
       for (const carDiv of carDivs) {
         station.cars.push({
-          name: await carDiv.$eval('.divDesc', e => e.innerText),
-          available: await carDiv.$eval('.cBCar strong', e => e.innerText) === 'Select'
+          name: await carDiv.$eval(CAR_NAME_SELECTOR, e => e.innerText),
+          available: await carDiv.$eval(CAR_AVAILABILITY_SELECTOR, e => e.innerText) === 'Select'
         })
       }
 
