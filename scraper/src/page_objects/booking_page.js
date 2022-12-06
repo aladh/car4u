@@ -1,9 +1,11 @@
 import ReservationGrid from './reservation_grid.js'
 
+const START_YEAR_SELECTOR = 'input[name=StartYear]'
 const START_MONTH_SELECTOR = 'input[name=StartMonth]'
 const START_DAY_SELECTOR = 'input[name=StartDay]'
 const START_HOUR_SELECTOR = 'select[name=StartHour]'
 const START_MINUTE_SELECTOR = 'select[name=StartMinute]'
+const END_YEAR_SELECTOR = 'input[name=EndYear]'
 const END_MONTH_SELECTOR = 'input[name=EndMonth]'
 const END_DAY_SELECTOR = 'input[name=EndDay]'
 const END_HOUR_SELECTOR = 'select[name=EndHour]'
@@ -21,12 +23,14 @@ export default class BookingPage {
     await this.page.waitForSelector(START_MONTH_SELECTOR)
   }
 
-  async search({ startMonth, startDay, startHour, startMinute, endMonth, endDay, endHour, endMinute }) {
+  async search({ startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute }) {
+    await this.page.$eval(START_YEAR_SELECTOR, (el, value) => el.value = value, startYear)
     await this.page.$eval(START_MONTH_SELECTOR, (el, value) => el.value = value, startMonth)
     await this.page.$eval(START_DAY_SELECTOR, (el, value) => el.value = value, startDay)
     await this.page.select(START_HOUR_SELECTOR, startHour)
     await this.page.select(START_MINUTE_SELECTOR, startMinute)
 
+    await this.page.$eval(END_YEAR_SELECTOR, (el, value) => el.value = value, endYear)
     await this.page.$eval(END_MONTH_SELECTOR, (el, value) => el.value = value, endMonth)
     await this.page.$eval(END_DAY_SELECTOR, (el, value) => el.value = value, endDay)
     await this.page.select(END_HOUR_SELECTOR, endHour)
