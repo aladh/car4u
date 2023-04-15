@@ -1,9 +1,21 @@
 stages:
+  - validate
   - scrape
   - notify
 
 variables:
   SCRAPE_OUTPUT_FILENAME: status.json
+
+validate_schedule:
+  stage: validate
+  image: ruby:3.2-bullseye
+  before_script:
+    - cd validator
+    - bundle install
+  script:
+    - ruby validate.rb
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
 
 puppeteer:
   stage: scrape
