@@ -35,6 +35,8 @@ puppeteer:
   retry:
     max: 2
     when: script_failure
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
 
 notify-if-available:
   stage: notify
@@ -46,3 +48,5 @@ notify-if-available:
     - go run . < $SCRAPE_OUTPUT_FILENAME
   needs:
     - puppeteer
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
