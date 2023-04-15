@@ -26,7 +26,7 @@ puppeteer:
 
 notify-if-available:
   stage: notify
-  image: golang:1.19-bullseye
+  image: golang:1.20-bullseye
   before_script:
     - mv scraper/$SCRAPE_OUTPUT_FILENAME notifier/
     - cd notifier
