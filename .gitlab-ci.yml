@@ -31,8 +31,6 @@ get_booking_times:
 puppeteer:
   stage: scrape
   image: node:18-bullseye
-  needs:
-    - get_booking_times
   before_script:
     - apt-get update && apt-get install -y libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2 > /dev/null
     - cd scraper
@@ -59,7 +57,5 @@ notify-if-available:
     - cd notifier
   script:
     - go run . < $SCRAPE_OUTPUT_FILENAME
-  needs:
-    - puppeteer
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
