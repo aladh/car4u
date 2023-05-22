@@ -19,8 +19,8 @@ get_booking_times:
     - booking_times=$(ruby booking_times.rb "$schedule_description")
     - excluded_stations=$(ruby excluded_stations.rb "$schedule_description")
     - echo "Schedule description - $schedule_description, booking times - $booking_times, excluded stations - $excluded_stations"
-    - echo 'BOOKING_TIMES="$booking_times"' >> $CI_PROJECT_DIR/$DOTENV_FILENAME
-    - echo 'EXCLUDED_STATIONS="$excluded_stations"' >> $CI_PROJECT_DIR/$DOTENV_FILENAME
+    - echo "BOOKING_TIMES=\"$booking_times\"" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
+    - echo "EXCLUDED_STATIONS=\"$excluded_stations\"" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
     - cat $CI_PROJECT_DIR/$DOTENV_FILENAME
   artifacts:
     reports:
