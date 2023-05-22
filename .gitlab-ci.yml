@@ -21,6 +21,7 @@ get_booking_times:
     - echo "Schedule description - $schedule_description, booking times - $booking_times, excluded stations - $excluded_stations"
     - echo "BOOKING_TIMES=$booking_times" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
     - echo "EXCLUDED_STATIONS=$excluded_stations" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
+    - cat $CI_PROJECT_DIR/$DOTENV_FILENAME
   artifacts:
     reports:
       dotenv: $DOTENV_FILENAME
