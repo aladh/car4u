@@ -33,6 +33,7 @@ func main() {
 func notify(status *status.Status, cfg *config.Config) error {
 	for _, station := range status.Stations {
 		if containsAny(station.Name, cfg.ExcludedStations) {
+			log.Println("Skipping excluded station: " + station.Name)
 			continue
 		}
 

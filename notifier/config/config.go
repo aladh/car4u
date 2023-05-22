@@ -52,5 +52,9 @@ func getEnvSlice(key string) ([]string, error) {
 		return nil, err
 	}
 
+	if len(value) == 0 {
+		return []string{}, nil
+	}
+
 	return strings.Split(value, separator), nil
 }
