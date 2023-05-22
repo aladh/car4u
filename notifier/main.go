@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("Could not load status file: %s", err)
 	}
 
-	log.Printf("Running notifier for booking times %s to %s with preferred stations %s\n", status.BookingStart, status.BookingEnd, cfg.PreferredStations)
+	log.Printf("Running notifier for booking times %s to %s with preferred stations %s and exlcuded stations %s\n", status.BookingStart, status.BookingEnd, cfg.PreferredStations, cfg.ExcludedStations)
 
 	err = notifyForPreferredStations(status, cfg)
 	if err != nil {

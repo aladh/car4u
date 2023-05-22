@@ -10,11 +10,17 @@ const separator = ","
 
 type Config struct {
 	PreferredStations []string
+	ExcludedStations  []string
 	WebhookURL        string
 }
 
 func FromEnv() (*Config, error) {
 	preferredStations, err := getEnvSlice("PREFERRED_STATIONS")
+	if err != nil {
+		return nil, err
+	}
+
+	excludedStations, err := getEnvSlice("EXCLUDED_STATIONS")
 	if err != nil {
 		return nil, err
 	}
@@ -26,6 +32,7 @@ func FromEnv() (*Config, error) {
 
 	return &Config{
 		PreferredStations: preferredStations,
+		ExcludedStations:  excludedStations,
 		WebhookURL:        webhookURL,
 	}, nil
 }

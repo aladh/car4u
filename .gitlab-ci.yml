@@ -10,15 +10,20 @@ get_booking_times:
   stage: prepare
   image: ruby:3.2-bullseye
   variables:
-    BOOKING_TIMES_FILENAME: booking_times.env
+    DOTENV_FILENAME: dotenv.env
   before_script:
     - cd preparer
     - bundle install
   script:
-    - echo "BOOKING_TIMES=$(ruby get_booking_times.rb)" > $CI_PROJECT_DIR/$BOOKING_TIMES_FILENAME
+    - schedule_description=$(ruby schedule_description.rb)
+    - booking_times=$(ruby booking_times.rb $schedule_description)
+    - excluded_stations=$(ruby excluded_stations.rb $schedule_description)
+    - echo "Schedule description - $schedule_description, booking times - $booking_times, excluded stations - $excluded_stations"
+    - echo "BOOKING_TIMES=$booking_times" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
+    - echo "EXCLUDED_STATIONS=$excluded_stations" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
   artifacts:
     reports:
-      dotenv: $BOOKING_TIMES_FILENAME
+      dotenv: $DOTENV_FILENAME
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
 
