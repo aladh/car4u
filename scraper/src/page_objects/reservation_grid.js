@@ -1,5 +1,5 @@
 const STATION_DIV_SELECTOR = '.tblAv'
-const STATION_NAME_SELECTOR = '.stationName'
+const STATION_NAME_SELECTOR = '.strongName a'
 const CAR_DIV_SELECTOR = '.bRow'
 const CAR_NAME_SELECTOR = '.divDesc'
 const CAR_AVAILABILITY_SELECTOR = '.cBCar strong'
