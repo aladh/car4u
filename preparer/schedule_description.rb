@@ -9,6 +9,6 @@ schedule = Gitlab
              .pipeline_schedules(ENV['CI_PROJECT_ID'])
              .select { |schedule| schedule.active }
              .map { |schedule| Gitlab.pipeline_schedule(ENV['CI_PROJECT_ID'], schedule.id) }
-             .find { |schedule| schedule.last_pipeline.id == ENV['CI_PIPELINE_ID'].to_i }
+             .find { |schedule| schedule.last_pipeline&.id == ENV['CI_PIPELINE_ID'].to_i }
 
 print schedule.description
