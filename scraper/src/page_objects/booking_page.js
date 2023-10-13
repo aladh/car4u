@@ -12,6 +12,11 @@ const END_HOUR_SELECTOR = 'select[name=EndHour]'
 const END_MINUTE_SELECTOR = 'select[name=EndMinute]'
 const SEARCH_BUTTON_SELECTOR = '#Button_Disponibility'
 
+const SELECTORS = {
+  stationDropdown: '#ddcl-StationID',
+  allStationsCheckbox: '#ddcl-StationID-i1',
+}
+
 export default class BookingPage {
   constructor(page) {
     this.page = page
@@ -35,6 +40,10 @@ export default class BookingPage {
     await this.page.$eval(END_DAY_SELECTOR, (el, value) => el.value = value, endDay)
     await this.page.select(END_HOUR_SELECTOR, endHour)
     await this.page.select(END_MINUTE_SELECTOR, endMinute)
+
+    // Select option to show all stations on reservation grid
+    await this.page.click(SELECTORS.stationDropdown)
+    await this.page.click(SELECTORS.allStationsCheckbox)
 
     await this.page.click(SEARCH_BUTTON_SELECTOR)
     await new Promise(r => setTimeout(r, 2000))
