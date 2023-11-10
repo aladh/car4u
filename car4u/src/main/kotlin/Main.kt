@@ -39,8 +39,8 @@ suspend fun main() {
     }.forEach { station ->
       sendWebhook(
         WEBHOOK_URL,
-        "**Date**: ${reservationGrid.bookingStart} - ${reservationGrid.bookingEnd}\n**Station**: ${station.name}\n" +
-          "**Cars**: ${station.cars.joinToString { it.name }}"
+        "Date: ${reservationGrid.bookingStart} - ${reservationGrid.bookingEnd}\nStation: ${station.name}\n" +
+          "Cars: ${station.cars.joinToString { it.name }}"
       )
     }
 }
