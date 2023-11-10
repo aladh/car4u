@@ -1,7 +1,19 @@
-detekt:
+lint:
   image: eclipse-temurin:17-jdk
   stage: test
   before_script:
     - cd car4u
   script:
     - ./gradlew detekt
+  except:
+    - schedules
+
+test:
+  image: eclipse-temurin:17-jdk
+  stage: test
+  before_script:
+    - cd car4u
+  script:
+    - ./gradlew test
+  except:
+    - schedules

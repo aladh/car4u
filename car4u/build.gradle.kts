@@ -14,6 +14,12 @@ repositories {
 dependencies {
   // detekt linter
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
+
+  // Kotest testing library
+  val kotestVersion = "5.7.2"
+  testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+  testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+  testImplementation("io.kotest:kotest-framework-datatest:$kotestVersion")
 }
 
 tasks.test {
