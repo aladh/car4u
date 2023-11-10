@@ -1,6 +1,7 @@
 plugins {
   kotlin("jvm") version "1.9.20"
   application
+  id("io.gitlab.arturbosch.detekt") version "1.23.3"
 }
 
 group = "ca.alad"
@@ -11,7 +12,8 @@ repositories {
 }
 
 dependencies {
-  testImplementation(kotlin("test"))
+  // detekt linter
+  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
 }
 
 tasks.test {
@@ -24,4 +26,10 @@ kotlin {
 
 application {
   mainClass.set("MainKt")
+}
+
+detekt {
+  buildUponDefaultConfig = true // preconfigure defaults
+  allRules = true // activate all available (even unstable) rules.
+  config.setFrom("detekt.yml")
 }

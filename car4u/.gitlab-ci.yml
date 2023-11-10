@@ -1,0 +1,7 @@
+detekt:
+  image: eclipse-temurin:17-jdk
+  stage: test
+  before_script:
+    - cd car4u
+  script:
+    - ./gradlew detekt

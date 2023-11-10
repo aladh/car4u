@@ -1,0 +1,16 @@
+config:
+  validation: true
+
+style:
+  WildcardImport:
+    active: false
+  MaxLineLength:
+    maxLineLength: 150
+
+formatting:
+  Indentation:
+    indentSize: 2
+  NoWildcardImports:
+    active: false
+  MaximumLineLength:
+    maxLineLength: 150

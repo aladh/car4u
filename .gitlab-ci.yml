@@ -1,4 +1,8 @@
+include:
+  local: car4u/.gitlab-ci.yml
+
 stages:
+  - test
   - prepare
   - scrape
   - notify
