@@ -1,6 +1,6 @@
 lint:
-  image: eclipse-temurin:17-jdk
   stage: test
+  image: eclipse-temurin:17-jdk
   before_script:
     - cd car4u
   script:
@@ -9,11 +9,22 @@ lint:
     - schedules
 
 test:
-  image: eclipse-temurin:17-jdk
   stage: test
+  image: eclipse-temurin:17-jdk
   before_script:
     - cd car4u
   script:
     - ./gradlew test
   except:
     - schedules
+
+notify_v2:
+  stage: notify
+  image: eclipse-temurin:17-jdk
+  before_script:
+    - mv scraper/$SCRAPE_OUTPUT_FILENAME car4u/
+    - cd car4u
+  script:
+    - cat $SCRAPE_OUTPUT_FILENAME | ./gradlew run --no-daemon
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
