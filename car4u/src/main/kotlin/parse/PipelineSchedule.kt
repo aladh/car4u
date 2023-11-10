@@ -13,9 +13,10 @@ object PipelineSchedule {
     .filter { it.startsWith(POSITIVE_FILTER_PREFIX) || it.startsWith(NEGATIVE_FILTER_PREFIX) }
     .fold(mutableListOf()) { list, option ->
       when {
-        option.startsWith("+stn:") -> list.add(StationNames(option.split(":").last().split(","), false))
-        option.startsWith("-stn:") -> list.add(StationNames(option.split(":").last().split(","), true))
-        option.startsWith("+car:") -> list.add(CarName(option.split(":").last()))
+        option.startsWith("-") -> list.add(StationNames(option.split("-").last().split(","), true))
+//        option.startsWith("+stn:") -> list.add(StationNames(option.split(":").last().split(","), false))
+//        option.startsWith("-stn:") -> list.add(StationNames(option.split(":").last().split(","), true))
+//        option.startsWith("+car:") -> list.add(CarName(option.split(":").last()))
       }
 
       list
