@@ -27,21 +27,21 @@ private val CI_PIPELINE_ID: String = System.getenv("CI_PIPELINE_ID").also {
 }
 
 suspend fun main() {
-  val filters = prepareFilters()
-
   val reservationGrid =
     generateSequence { readlnOrNull() }
       .joinToString(separator = "")
       .let { Json.decodeFromString(ReservationGrid.serializer(), it) }
 
-  filters.fold(reservationGrid.stations) { stations, filter ->
-    filter.filter(stations)
-  }.forEach { station ->
-    sendWebhook(
-      WEBHOOK_URL,
-      "Date(${reservationGrid.bookingStart}-${reservationGrid.bookingEnd}) Station(${station.name}) Cars(${station.cars.joinToString { it.name }}})"
-    )
-  }
+  prepareFilters()
+    .also { println("Filters: $it") }
+    .fold(reservationGrid.stations) { stations, filter ->
+      filter.filter(stations)
+    }.forEach { station ->
+      sendWebhook(
+        WEBHOOK_URL,
+        "Date(${reservationGrid.bookingStart}-${reservationGrid.bookingEnd}) Station(${station.name}) Cars(${station.cars.joinToString { it.name }}})"
+      )
+    }
 }
 
 private fun prepareFilters() =
