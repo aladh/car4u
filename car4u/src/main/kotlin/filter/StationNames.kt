@@ -7,6 +7,8 @@ class StationNames(private val names: List<String>, private val inverse: Boolean
     stations.filter {
       if (inverse) !it.hasAnyName(names) else it.hasAnyName(names)
     }
+
+  override fun toString(): String = "StationNames(names=$names, inverse=$inverse)"
 }
 
 private fun ReservationGrid.Station.hasAnyName(names: List<String>) =

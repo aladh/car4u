@@ -11,6 +11,8 @@ class CarAvailability(private val availability: Boolean) : StationFilter {
 
       it.copy(cars = matchingCars)
     }
+
+  override fun toString(): String = "CarAvailability(availability=$availability)"
 }
 
 private fun ReservationGrid.Station.carsWithAvailability(availability: Boolean): List<ReservationGrid.Station.Car> =

@@ -11,6 +11,8 @@ class CarName(private val name: String) : StationFilter {
 
       it.copy(cars = matchingCars)
     }
+
+  override fun toString(): String = "CarName(name=$name)"
 }
 
 private fun ReservationGrid.Station.carsWithName(name: String): List<ReservationGrid.Station.Car> =
