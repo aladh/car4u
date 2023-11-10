@@ -4,7 +4,7 @@ lint:
   before_script:
     - cd car4u
   script:
-    - ./gradlew detekt
+    - ./gradlew -q detekt
   except:
     - schedules
 
@@ -14,7 +14,7 @@ test:
   before_script:
     - cd car4u
   script:
-    - ./gradlew test
+    - ./gradlew -q test
   except:
     - schedules
 
@@ -25,6 +25,6 @@ notify_v2:
     - mv scraper/$SCRAPE_OUTPUT_FILENAME car4u/
     - cd car4u
   script:
-    - cat $SCRAPE_OUTPUT_FILENAME | ./gradlew run --no-daemon
+    - cat $SCRAPE_OUTPUT_FILENAME | ./gradlew -q run --no-daemon
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
