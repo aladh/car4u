@@ -1,6 +1,7 @@
 import fetch.GitlabSchedule
 import filter.CarAvailability
 import filter.CarName
+import filter.StationFilter
 import filter.StationNames
 import kotlinx.serialization.json.Json
 import notification.sendWebhook
@@ -28,15 +29,16 @@ private val CI_PIPELINE_ID: String = System.getenv("CI_PIPELINE_ID").also {
 
 suspend fun main() {
   val reservationGrid =
-    generateSequence { readlnOrNull() }
-      .joinToString(separator = "")
-      .let { Json.decodeFromString(ReservationGrid.serializer(), it) }
+    System.`in`
+      .readBytes()
+      .decodeToString()
+      .let {
+        Json.decodeFromString(ReservationGrid.serializer(), it)
+      }
 
-  prepareFilters()
-    .also { println("Filters: $it") }
-    .fold(reservationGrid.stations) { stations, filter ->
-      filter.filter(stations)
-    }.forEach { station ->
+  reservationGrid
+    .filteredStations()
+    .forEach { station ->
       sendWebhook(
         WEBHOOK_URL,
         "Date: ${reservationGrid.bookingStart} - ${reservationGrid.bookingEnd}\nStation: ${station.name}\n" +
@@ -45,24 +47,35 @@ suspend fun main() {
     }
 }
 
+private fun ReservationGrid.filteredStations(): List<ReservationGrid.Station> =
+  prepareFilters()
+    .also { println("Filters: $it") }
+    .fold(stations) { stations, filter ->
+      filter.filter(stations)
+    }
+
 private fun prepareFilters() =
-  GitlabSchedule(
-    readSchedulesToken = READ_SCHEDULES_TOKEN,
-    ciProjectId = CI_PROJECT_ID,
-    ciPipelineId = CI_PIPELINE_ID
-  ).current()
-    ?.let {
-      PipelineSchedule.parse(it.description)
-    }?.map { option ->
-      when (option) {
-        is PipelineSchedule.StationNames -> StationNames(names = option.names, inverse = option.inverse)
-        is PipelineSchedule.CarName -> CarName(name = option.name)
-        else -> throw IllegalArgumentException("Unknown option: $option")
-      }
-    }?.plus(
+  GitlabSchedule(readSchedulesToken = READ_SCHEDULES_TOKEN, ciProjectId = CI_PROJECT_ID, ciPipelineId = CI_PIPELINE_ID)
+    .current()
+    ?.description
+    ?.parseOptions()
+    ?.mapToFilters()
+    ?.plus(
       listOf(
         CarAvailability(availability = true),
         StationNames(names = PREFERRED_STATIONS.split(","))
       )
     )
     ?: throw IllegalArgumentException("No pipeline schedule found")
+
+private fun String.parseOptions(): List<PipelineSchedule.Option> =
+  PipelineSchedule.parse(this)
+
+private fun List<PipelineSchedule.Option>.mapToFilters(): List<StationFilter> =
+  map {
+    when (it) {
+      is PipelineSchedule.StationNames -> StationNames(names = it.names, inverse = it.inverse)
+      is PipelineSchedule.CarName -> CarName(name = it.name)
+      else -> throw IllegalArgumentException("Unknown option: $it")
+    }
+  }
