@@ -12,7 +12,7 @@ class StationNames(private val names: List<String>, private val inverse: Boolean
 }
 
 private fun ReservationGrid.Station.hasAnyName(names: List<String>) =
-  this.name.lowercase().containsAny(names.map { it.lowercase() })
+  name.lowercase().containsAny(names.map { it.lowercase() })
 
 private fun String.containsAny(names: List<String>): Boolean =
   names.any { this.contains(it) }

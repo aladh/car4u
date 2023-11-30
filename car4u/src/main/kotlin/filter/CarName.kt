@@ -16,7 +16,7 @@ class CarName(private val name: String) : StationFilter {
 }
 
 private fun ReservationGrid.Station.carsWithName(name: String): List<ReservationGrid.Station.Car> =
-  this.cars.filter { it.hasName(name) }
+  cars.filter { it.hasName(name) }
 
 private fun ReservationGrid.Station.Car.hasName(name: String): Boolean =
   this.name.lowercase().contains(name.lowercase())

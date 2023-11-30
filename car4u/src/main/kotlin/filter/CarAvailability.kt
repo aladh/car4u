@@ -16,4 +16,4 @@ class CarAvailability(private val availability: Boolean) : StationFilter {
 }
 
 private fun ReservationGrid.Station.carsWithAvailability(availability: Boolean): List<ReservationGrid.Station.Car> =
-  this.cars.filter { it.available == availability }
+  cars.filter { it.available == availability }
