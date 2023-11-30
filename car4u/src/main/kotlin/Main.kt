@@ -8,23 +8,23 @@ import notification.sendWebhook
 import parse.PipelineSchedule
 
 private val WEBHOOK_URL: String = System.getenv("WEBHOOK_URL").also {
-  require(it != null) { "WEBHOOK_URL environment variable not set" }
+  requireNotNull(it) { "WEBHOOK_URL environment variable not set" }
 }
 
 private val PREFERRED_STATIONS: String = System.getenv("PREFERRED_STATIONS").also {
-  require(it != null) { "PREFERRED_STATIONS environment variable not set" }
+  requireNotNull(it) { "PREFERRED_STATIONS environment variable not set" }
 }
 
 private val READ_SCHEDULES_TOKEN: String = System.getenv("READ_SCHEDULES_TOKEN").also {
-  require(it != null) { "READ_SCHEDULES_TOKEN environment variable not set" }
+  requireNotNull(it) { "READ_SCHEDULES_TOKEN environment variable not set" }
 }
 
 private val CI_PROJECT_ID: String = System.getenv("CI_PROJECT_ID").also {
-  require(it != null) { "CI_PROJECT_ID environment variable not set" }
+  requireNotNull(it) { "CI_PROJECT_ID environment variable not set" }
 }
 
 private val CI_PIPELINE_ID: String = System.getenv("CI_PIPELINE_ID").also {
-  require(it != null) { "CI_PIPELINE_ID environment variable not set" }
+  requireNotNull(it) { "CI_PIPELINE_ID environment variable not set" }
 }
 
 suspend fun main() {
