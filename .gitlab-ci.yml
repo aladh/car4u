@@ -52,14 +52,3 @@ puppeteer:
     when: script_failure
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
-
-notify-if-available:
-  stage: notify
-  image: golang:1.20-bullseye
-  before_script:
-    - mv scraper/$SCRAPE_OUTPUT_FILENAME notifier/
-    - cd notifier
-  script:
-    - go run . < $SCRAPE_OUTPUT_FILENAME
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
