@@ -1,4 +1,4 @@
-package fetch
+package fetch.gitlab
 
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.PipelineSchedule

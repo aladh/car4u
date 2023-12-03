@@ -1,4 +1,4 @@
-import fetch.GitlabSchedule
+import fetch.gitlab.GitlabSchedule
 import filter.CarAvailability
 import filter.CarName
 import filter.StationFilter
@@ -26,6 +26,14 @@ private val CI_PROJECT_ID: String = System.getenv("CI_PROJECT_ID").also {
 private val CI_PIPELINE_ID: String = System.getenv("CI_PIPELINE_ID").also {
   requireNotNull(it) { "CI_PIPELINE_ID environment variable not set" }
 }
+
+// private val USERNAME: String = System.getenv("USERNAME").also {
+//  requireNotNull(it) { "USERNAME environment variable not set" }
+// }
+//
+// private val PASSWORD: String = System.getenv("PASSWORD").also {
+//  requireNotNull(it) { "PASSWORD environment variable not set" }
+// }
 
 suspend fun main() {
   val reservationGrid =

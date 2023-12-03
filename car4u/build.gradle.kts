@@ -34,6 +34,9 @@ dependencies {
 
   // GitLab API client
   implementation("org.gitlab4j:gitlab4j-api:5.3.0")
+
+  // Browser automation
+  implementation("com.microsoft.playwright:playwright:1.28.1")
 }
 
 tasks.test {
