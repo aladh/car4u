@@ -28,3 +28,4 @@ notify_v2:
     - cat $SCRAPE_OUTPUT_FILENAME | ./gradlew -q run --no-daemon
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
+  timeout: 5m
