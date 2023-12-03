@@ -2,7 +2,7 @@ plugins {
   kotlin("jvm") version "1.9.20"
   kotlin("plugin.serialization") version "1.9.20"
   application
-  id("io.gitlab.arturbosch.detekt") version "1.23.3"
+  id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
 
 group = "ca.alad"
@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
   // detekt linter
-  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
+  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
 
   // Kotest testing library
   val kotestVersion = "5.7.2"

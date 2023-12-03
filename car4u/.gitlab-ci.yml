@@ -4,7 +4,7 @@ lint:
   before_script:
     - cd car4u
   script:
-    - ./gradlew -q detekt
+    - ./gradlew -q --continue detektMain detektTest
   except:
     - schedules
 
