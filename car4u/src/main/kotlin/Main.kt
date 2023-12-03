@@ -1,11 +1,10 @@
-import fetch.gitlab.GitlabSchedule
+import fetch.gitlab.fetchPipelineSchedule
 import filter.CarAvailability
 import filter.CarName
 import filter.StationFilter
 import filter.StationNames
 import kotlinx.serialization.json.Json
 import notification.sendWebhook
-import parse.PipelineSchedule
 
 private val WEBHOOK_URL: String = System.getenv("WEBHOOK_URL").also {
   requireNotNull(it) { "WEBHOOK_URL environment variable not set" }
@@ -63,10 +62,8 @@ private fun ReservationGrid.filteredStations(): List<ReservationGrid.Station> =
     }
 
 private fun prepareFilters() =
-  GitlabSchedule(readSchedulesToken = READ_SCHEDULES_TOKEN, ciProjectId = CI_PROJECT_ID, ciPipelineId = CI_PIPELINE_ID)
-    .current()
-    ?.description
-    ?.parseOptions()
+  fetchPipelineSchedule(readSchedulesToken = READ_SCHEDULES_TOKEN, ciProjectId = CI_PROJECT_ID, ciPipelineId = CI_PIPELINE_ID)
+    ?.options()
     ?.mapToFilters()
     ?.plus(
       listOf(
@@ -75,9 +72,6 @@ private fun prepareFilters() =
       )
     )
     ?: throw IllegalArgumentException("No pipeline schedule found")
-
-private fun String.parseOptions(): List<PipelineSchedule.Option> =
-  PipelineSchedule.parse(this)
 
 private fun List<PipelineSchedule.Option>.mapToFilters(): List<StationFilter> =
   map {
