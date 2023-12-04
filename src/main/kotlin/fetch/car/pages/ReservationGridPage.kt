@@ -20,16 +20,16 @@ class ReservationGridPage(private val page: Page) {
 
     page.querySelectorAll(STATION_DIV_SELECTOR).forEach { stationDiv ->
       val stationName = stationDiv.querySelector(STATION_NAME_SELECTOR)?.textContent()?.trim()
-      checkNotNull(stationName)
+      checkNotNull(stationName) { "Station name not found" }
 
       val cars: MutableList<AvailabilityReport.Car> = mutableListOf()
 
       stationDiv.querySelectorAll(CAR_DIV_SELECTOR).forEach { carDiv ->
         val carName = carDiv.querySelector(CAR_NAME_SELECTOR)?.textContent()?.trim()
-        checkNotNull(carName)
+        checkNotNull(carName) { "Car name not found" }
 
         val carAvailability = carDiv.querySelector(CAR_AVAILABILITY_SELECTOR)?.textContent()?.trim()
-        checkNotNull(carAvailability)
+        checkNotNull(carAvailability) { "Car availability not found" }
 
         cars.add(
           AvailabilityReport.Car(

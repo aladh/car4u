@@ -14,18 +14,6 @@ private val PREFERRED_STATIONS: String = System.getenv("PREFERRED_STATIONS").als
   requireNotNull(it) { "PREFERRED_STATIONS environment variable not set" }
 }
 
-private val READ_SCHEDULES_TOKEN: String = System.getenv("READ_SCHEDULES_TOKEN").also {
-  requireNotNull(it) { "READ_SCHEDULES_TOKEN environment variable not set" }
-}
-
-private val CI_PROJECT_ID: String = System.getenv("CI_PROJECT_ID").also {
-  requireNotNull(it) { "CI_PROJECT_ID environment variable not set" }
-}
-
-private val CI_PIPELINE_ID: String = System.getenv("CI_PIPELINE_ID").also {
-  requireNotNull(it) { "CI_PIPELINE_ID environment variable not set" }
-}
-
 private val USERNAME: String = System.getenv("USERNAME").also {
   requireNotNull(it) { "USERNAME environment variable not set" }
 }
@@ -34,6 +22,11 @@ private val PASSWORD: String = System.getenv("PASSWORD").also {
   requireNotNull(it) { "PASSWORD environment variable not set" }
 }
 
+private val READ_SCHEDULES_TOKEN: String? = System.getenv("READ_SCHEDULES_TOKEN")
+private val CI_PROJECT_ID: String? = System.getenv("CI_PROJECT_ID")
+private val CI_PIPELINE_ID: String? = System.getenv("CI_PIPELINE_ID")
+
+// Used for running outside of GitLab CI
 private val PIPELINE_SCHEDULE_DESCRIPTION: String? = System.getenv("PIPELINE_SCHEDULE_DESCRIPTION")
 
 suspend fun main() {
@@ -47,7 +40,9 @@ suspend fun main() {
       )
   checkNotNull(schedule) { "No pipeline schedule found" }
 
-  val reservationTime = schedule.reservationTime()
+  val reservationTime = schedule.reservationTime().also {
+    println("Reservation: ${it.bookingStart} - ${it.bookingEnd}")
+  }
 
   val availabilityReport = fetchAvailabilityReport(
     username = USERNAME,

@@ -1,12 +1,10 @@
 package filter
 
-class StationNames(private val names: List<String>, private val inverse: Boolean = false) : StationFilter {
+data class StationNames(private val names: List<String>, private val inverse: Boolean = false) : StationFilter {
   override fun filter(stations: List<AvailabilityReport.Station>): List<AvailabilityReport.Station> =
     stations.filter {
       if (inverse) !it.hasAnyName(names) else it.hasAnyName(names)
     }
-
-  override fun toString(): String = "StationNames(names=$names, inverse=$inverse)"
 }
 
 private fun AvailabilityReport.Station.hasAnyName(names: List<String>) =

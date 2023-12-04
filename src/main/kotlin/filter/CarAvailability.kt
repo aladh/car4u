@@ -2,7 +2,7 @@ package filter
 
 import AvailabilityReport
 
-class CarAvailability(private val availability: Boolean) : StationFilter {
+data class CarAvailability(private val availability: Boolean) : StationFilter {
   override fun filter(stations: List<AvailabilityReport.Station>): List<AvailabilityReport.Station> =
     stations.mapNotNull {
       val matchingCars = it.carsWithAvailability(availability)
@@ -11,8 +11,6 @@ class CarAvailability(private val availability: Boolean) : StationFilter {
 
       it.copy(cars = matchingCars)
     }
-
-  override fun toString(): String = "CarAvailability(availability=$availability)"
 }
 
 private fun AvailabilityReport.Station.carsWithAvailability(availability: Boolean): List<AvailabilityReport.Car> =

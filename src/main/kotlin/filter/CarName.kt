@@ -2,7 +2,7 @@ package filter
 
 import AvailabilityReport
 
-class CarName(private val name: String) : StationFilter {
+data class CarName(private val name: String) : StationFilter {
   override fun filter(stations: List<AvailabilityReport.Station>): List<AvailabilityReport.Station> =
     stations.mapNotNull {
       val matchingCars = it.carsWithName(name)
@@ -11,8 +11,6 @@ class CarName(private val name: String) : StationFilter {
 
       it.copy(cars = matchingCars)
     }
-
-  override fun toString(): String = "CarName(name=$name)"
 }
 
 private fun AvailabilityReport.Station.carsWithName(name: String): List<AvailabilityReport.Car> =
