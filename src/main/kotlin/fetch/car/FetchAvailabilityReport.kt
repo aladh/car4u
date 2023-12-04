@@ -9,6 +9,7 @@ import fetch.car.pages.AvailabilityReportPage
 import fetch.car.pages.BookingPage
 import fetch.car.pages.LoginPage
 import fetch.car.pages.ReservationGridPage
+import kotlin.io.path.Path
 
 private class PageNotFoundException : RuntimeException()
 
@@ -21,6 +22,13 @@ fun fetchAvailabilityReport(username: String, password: String, reservationTime:
     BookingPage(page).search(reservationTime)
 
     page.waitForLoadState()
+
+    page.screenshot(
+      Page.ScreenshotOptions().also {
+        it.path = Path("availability_page.png")
+        it.fullPage = true
+      }
+    )
 
     when {
       AvailabilityReportPage.exists(page) -> {
