@@ -1,8 +1,12 @@
+default:
+  image: eclipse-temurin:17-jdk
+
+stages:
+  - test
+  - run
+
 lint:
   stage: test
-  image: eclipse-temurin:17-jdk
-  before_script:
-    - cd car4u
   script:
     - ./gradlew -q --continue detektMain detektTest
   except:
@@ -10,22 +14,15 @@ lint:
 
 test:
   stage: test
-  image: eclipse-temurin:17-jdk
-  before_script:
-    - cd car4u
   script:
     - ./gradlew -q test
   except:
     - schedules
 
 notify_v2:
-  stage: notify
-  image: eclipse-temurin:17-jdk
-  before_script:
-    - mv scraper/$SCRAPE_OUTPUT_FILENAME car4u/
-    - cd car4u
+  stage: run
   script:
-    - cat $SCRAPE_OUTPUT_FILENAME | ./gradlew -q run --no-daemon
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - ./gradlew -q --no-daemon run
+  only:
+    - schedules
   timeout: 5m
