@@ -24,6 +24,9 @@ notify:
   image: mcr.microsoft.com/playwright/java:v1.40.0-jammy
   script:
     - ./gradlew -q --no-daemon run
+  artifacts:
+    paths:
+      - availability_page.png
   only:
     - schedules
   timeout: 5m
