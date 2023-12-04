@@ -1,6 +1,5 @@
 plugins {
-  kotlin("jvm") version "1.9.20"
-  kotlin("plugin.serialization") version "1.9.20"
+  kotlin("jvm") version "1.9.21"
   application
   id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
@@ -22,9 +21,6 @@ dependencies {
   testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
   testImplementation("io.kotest:kotest-framework-datatest:$kotestVersion")
 
-  // JSON serialization
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
   // HTTP client
   val ktorVersion = "2.3.6"
   implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -33,7 +29,7 @@ dependencies {
   implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
   // GitLab API client
-  implementation("org.gitlab4j:gitlab4j-api:5.3.0")
+  implementation("org.gitlab4j:gitlab4j-api:5.4.0")
 
   // Browser automation
   implementation("com.microsoft.playwright:playwright:1.28.1")
@@ -43,12 +39,8 @@ tasks.test {
   useJUnitPlatform()
 }
 
-tasks.named<JavaExec>("run") {
-  standardInput = System.`in`
-}
-
 kotlin {
-  jvmToolchain(8)
+  jvmToolchain(17)
 }
 
 application {
