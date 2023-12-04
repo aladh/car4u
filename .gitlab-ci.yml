@@ -1,54 +1,31 @@
-include:
-  local: car4u/.gitlab-ci.yml
-
-stages:
-  - test
-  - prepare
-  - scrape
-  - notify
-
-variables:
-  SCRAPE_OUTPUT_FILENAME: status.json
-
-get_booking_times:
-  stage: prepare
-  image: ruby:3.2-bullseye
-  variables:
-    DOTENV_FILENAME: dotenv.env
+lint:
+  stage: test
+  image: eclipse-temurin:17-jdk
   before_script:
-    - cd preparer
-    - bundle install
+    - cd car4u
   script:
-    - schedule_description=$(ruby schedule_description.rb)
-    - booking_times=$(ruby booking_times.rb "$schedule_description")
-    - excluded_stations=$(ruby excluded_stations.rb "$schedule_description")
-    - echo "Schedule description - $schedule_description, booking times - $booking_times, excluded stations - $excluded_stations"
-    - echo "BOOKING_TIMES=$booking_times" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
-    - echo "EXCLUDED_STATIONS=$excluded_stations" >> $CI_PROJECT_DIR/$DOTENV_FILENAME
-    - cat $CI_PROJECT_DIR/$DOTENV_FILENAME
-  artifacts:
-    reports:
-      dotenv: $DOTENV_FILENAME
+    - ./gradlew -q --continue detektMain detektTest
+  except:
+    - schedules
+
+test:
+  stage: test
+  image: eclipse-temurin:17-jdk
+  before_script:
+    - cd car4u
+  script:
+    - ./gradlew -q test
+  except:
+    - schedules
+
+notify_v2:
+  stage: notify
+  image: eclipse-temurin:17-jdk
+  before_script:
+    - mv scraper/$SCRAPE_OUTPUT_FILENAME car4u/
+    - cd car4u
+  script:
+    - cat $SCRAPE_OUTPUT_FILENAME | ./gradlew -q run --no-daemon
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
-
-puppeteer:
-  stage: scrape
-  image: node:18-bullseye
-  before_script:
-    - apt-get update && apt-get install -y libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2 > /dev/null
-    - cd scraper
-  script:
-    - npm ci
-    - echo "Running scraper for booking times $BOOKING_TIMES"
-    - node index.js "$BOOKING_TIMES" > $SCRAPE_OUTPUT_FILENAME
-  artifacts:
-    paths:
-      - scraper/*.png
-      - scraper/$SCRAPE_OUTPUT_FILENAME
-    when: always
-  retry:
-    max: 2
-    when: script_failure
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+  timeout: 5m

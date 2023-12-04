@@ -1,5 +1,6 @@
 plugins {
   kotlin("jvm") version "1.9.21"
+  kotlin("plugin.serialization") version "1.9.21"
   application
   id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
@@ -27,6 +28,9 @@ dependencies {
   implementation("io.ktor:ktor-client-cio:$ktorVersion")
   implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
   implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
+  // JSON serialization
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
   // GitLab API client
   implementation("org.gitlab4j:gitlab4j-api:5.4.0")
