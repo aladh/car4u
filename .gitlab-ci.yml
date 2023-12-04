@@ -19,8 +19,9 @@ test:
   except:
     - schedules
 
-notify_v2:
+notify:
   stage: run
+  image: mcr.microsoft.com/playwright/java:v1.40.0-jammy
   script:
     - ./gradlew -q --no-daemon run
   only:
