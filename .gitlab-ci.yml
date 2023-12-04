@@ -27,6 +27,7 @@ notify:
   artifacts:
     paths:
       - availability_page.png
+    when: always
   only:
     - schedules
   timeout: 5m
