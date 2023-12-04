@@ -1,9 +1,9 @@
 package filter
 
-import ReservationGrid
+import AvailabilityReport
 
 class CarName(private val name: String) : StationFilter {
-  override fun filter(stations: List<ReservationGrid.Station>): List<ReservationGrid.Station> =
+  override fun filter(stations: List<AvailabilityReport.Station>): List<AvailabilityReport.Station> =
     stations.mapNotNull {
       val matchingCars = it.carsWithName(name)
 
@@ -15,8 +15,8 @@ class CarName(private val name: String) : StationFilter {
   override fun toString(): String = "CarName(name=$name)"
 }
 
-private fun ReservationGrid.Station.carsWithName(name: String): List<ReservationGrid.Station.Car> =
+private fun AvailabilityReport.Station.carsWithName(name: String): List<AvailabilityReport.Car> =
   cars.filter { it.hasName(name) }
 
-private fun ReservationGrid.Station.Car.hasName(name: String): Boolean =
+private fun AvailabilityReport.Car.hasName(name: String): Boolean =
   this.name.lowercase().contains(name.lowercase())

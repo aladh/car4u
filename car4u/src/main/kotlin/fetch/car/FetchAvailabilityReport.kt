@@ -12,7 +12,7 @@ import fetch.car.pages.ReservationGridPage
 
 private class PageNotFoundException : RuntimeException()
 
-fun fetchCarAvailability(username: String, password: String, reservationTime: ReservationTime): AvailabilityReport =
+fun fetchAvailabilityReport(username: String, password: String, reservationTime: ReservationTime): AvailabilityReport =
   withPage { page ->
     LoginPage(page).login(username, password)
 

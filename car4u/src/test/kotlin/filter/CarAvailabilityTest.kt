@@ -1,16 +1,15 @@
 package filter
 
-import ReservationGrid
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 
 class CarAvailabilityTest : DescribeSpec({
-  val station1 = ReservationGrid.Station("1", listOf(ReservationGrid.Station.Car("Horse", true)))
-  val station2 = ReservationGrid.Station("2", listOf(ReservationGrid.Station.Car("Pony", false)))
-  val station3 = ReservationGrid.Station(
+  val station1 = AvailabilityReport.Station("1", listOf(AvailabilityReport.Car("Horse", true)))
+  val station2 = AvailabilityReport.Station("2", listOf(AvailabilityReport.Car("Pony", false)))
+  val station3 = AvailabilityReport.Station(
     "3",
-    listOf(ReservationGrid.Station.Car("Husky", true), ReservationGrid.Station.Car("Horse", false))
+    listOf(AvailabilityReport.Car("Husky", true), AvailabilityReport.Car("Horse", false))
   )
   val stations = listOf(station1, station2, station3)
 

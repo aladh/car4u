@@ -1,7 +1,7 @@
 package filter
 
-import ReservationGrid
+import AvailabilityReport
 
 fun interface StationFilter {
-  fun filter(stations: List<ReservationGrid.Station>): List<ReservationGrid.Station>
+  fun filter(stations: List<AvailabilityReport.Station>): List<AvailabilityReport.Station>
 }

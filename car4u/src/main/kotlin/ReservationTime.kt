@@ -9,4 +9,10 @@ data class ReservationTime(
   val endDay: String,
   val endHour: String,
   val endMinute: String
-)
+) {
+  val bookingStart: String
+    get() = "$startYear-$startMonth-$startDay $startHour:$startMinute"
+
+  val bookingEnd: String
+    get() = "$endYear-$endMonth-$endDay $endHour:$endMinute"
+}

@@ -1,9 +1,9 @@
+import fetch.car.fetchAvailabilityReport
 import fetch.gitlab.fetchPipelineSchedule
 import filter.CarAvailability
 import filter.CarName
 import filter.StationFilter
 import filter.StationNames
-import kotlinx.serialization.json.Json
 import notification.sendWebhook
 
 private val WEBHOOK_URL: String = System.getenv("WEBHOOK_URL").also {
@@ -26,52 +26,63 @@ private val CI_PIPELINE_ID: String = System.getenv("CI_PIPELINE_ID").also {
   requireNotNull(it) { "CI_PIPELINE_ID environment variable not set" }
 }
 
-// private val USERNAME: String = System.getenv("USERNAME").also {
-//  requireNotNull(it) { "USERNAME environment variable not set" }
-// }
-//
-// private val PASSWORD: String = System.getenv("PASSWORD").also {
-//  requireNotNull(it) { "PASSWORD environment variable not set" }
-// }
+private val USERNAME: String = System.getenv("USERNAME").also {
+  requireNotNull(it) { "USERNAME environment variable not set" }
+}
+
+private val PASSWORD: String = System.getenv("PASSWORD").also {
+  requireNotNull(it) { "PASSWORD environment variable not set" }
+}
+
+private val PIPELINE_SCHEDULE_DESCRIPTION: String? = System.getenv("PIPELINE_SCHEDULE_DESCRIPTION")
 
 suspend fun main() {
-  val reservationGrid =
-    System.`in`
-      .readBytes()
-      .decodeToString()
-      .let {
-        Json.decodeFromString(ReservationGrid.serializer(), it)
-      }
+  val schedule =
+    PIPELINE_SCHEDULE_DESCRIPTION
+      ?.let { PipelineSchedule(it) }
+      ?: fetchPipelineSchedule(
+        readSchedulesToken = READ_SCHEDULES_TOKEN,
+        ciProjectId = CI_PROJECT_ID,
+        ciPipelineId = CI_PIPELINE_ID
+      )
+  checkNotNull(schedule) { "No pipeline schedule found" }
 
-  reservationGrid
-    .filteredStations()
+  val reservationTime = schedule.reservationTime()
+
+  val availabilityReport = fetchAvailabilityReport(
+    username = USERNAME,
+    password = PASSWORD,
+    reservationTime = reservationTime
+  )
+
+  availabilityReport
+    .filteredStations(schedule)
     .forEach { station ->
       sendWebhook(
         WEBHOOK_URL,
-        "Date: ${reservationGrid.bookingStart} - ${reservationGrid.bookingEnd}\nStation: ${station.name}\n" +
+        "Date: ${reservationTime.bookingStart} - ${reservationTime.bookingEnd}\nStation: ${station.name}\n" +
           "Cars: ${station.cars.joinToString { it.name }}"
       )
     }
 }
 
-private fun ReservationGrid.filteredStations(): List<ReservationGrid.Station> =
-  prepareFilters()
+private fun AvailabilityReport.filteredStations(schedule: PipelineSchedule): List<AvailabilityReport.Station> =
+  schedule
+    .filters()
     .also { println("Filters: $it") }
     .fold(stations) { stations, filter ->
       filter.filter(stations)
     }
 
-private fun prepareFilters() =
-  fetchPipelineSchedule(readSchedulesToken = READ_SCHEDULES_TOKEN, ciProjectId = CI_PROJECT_ID, ciPipelineId = CI_PIPELINE_ID)
-    ?.options()
-    ?.mapToFilters()
-    ?.plus(
+private fun PipelineSchedule.filters(): List<StationFilter> =
+  options()
+    .mapToFilters()
+    .plus(
       listOf(
         CarAvailability(availability = true),
         StationNames(names = PREFERRED_STATIONS.split(","))
       )
     )
-    ?: throw IllegalArgumentException("No pipeline schedule found")
 
 private fun List<PipelineSchedule.Option>.mapToFilters(): List<StationFilter> =
   map {
